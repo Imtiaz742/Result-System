@@ -1,0 +1,138 @@
+import java.util.*;
+
+// =====================
+// ABSTRACTION + ENCAPSULATION
+// =====================
+abstract class Student {
+    private static int counter = 1;
+    private int id;
+    private String name;
+    private int marks;
+
+    Student(String name, int marks) {
+        this.id = counter++;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public int getMarks() { return marks; }
+
+    abstract String getResult();
+}
+
+// =====================
+// INHERITANCE + POLYMORPHISM
+// =====================
+class PassStudent extends Student {
+    PassStudent(String name, int marks) {
+        super(name, marks);
+    }
+
+    String getResult() {
+        return "Pass";
+    }
+}
+
+class FailStudent extends Student {
+    FailStudent(String name, int marks) {
+        super(name, marks);
+    }
+
+    String getResult() {
+        return "Fail";
+    }
+}
+
+// =====================
+// SYSTEM CLASS
+// =====================
+class ResultSystem {
+    ArrayList<Student> list = new ArrayList<>();
+
+    void addStudent(Student s) {
+        list.add(s);
+        System.out.println(s.getName() + " Added");
+    }
+
+    void showAll() {
+        if (list.isEmpty()) {
+            System.out.println("No Students");
+            return;
+        }
+
+        System.out.println("\n--- Student List ---");
+        for (Student s : list) {
+            System.out.println("ID: " + s.getId() +
+                    " | Name: " + s.getName() +
+                    " | Marks: " + s.getMarks() +
+                    " | Result: " + s.getResult());
+        }
+    }
+
+    void showPass() {
+        for (Student s : list) {
+            if (s.getResult().equals("Pass")) {
+                System.out.println(s.getName());
+            }
+        }
+    }
+}
+
+// =====================
+// MAIN CLASS
+// =====================
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ResultSystem rs = new ResultSystem();
+
+        while (true) {
+            System.out.println("\n1.Add Pass Student");
+            System.out.println("2.Add Fail Student");
+            System.out.println("3.Show All");
+            System.out.println("4.Show Pass Students");
+            System.out.println("0.Exit");
+
+            int ch = sc.nextInt();
+            sc.nextLine();
+
+            if (ch == 1) {
+                System.out.print("Name: ");
+                String name = sc.nextLine();
+                System.out.print("Marks: ");
+                int marks = sc.nextInt();
+
+                rs.addStudent(new PassStudent(name, marks));
+            }
+
+            else if (ch == 2) {
+                System.out.print("Name: ");
+                String name = sc.nextLine();
+                System.out.print("Marks: ");
+                int marks = sc.nextInt();
+
+                rs.addStudent(new FailStudent(name, marks));
+            }
+
+            else if (ch == 3) {
+                rs.showAll();
+            }
+
+            else if (ch == 4) {
+                rs.showPass();
+            }
+
+            else if (ch == 0) {
+                break;
+            }
+
+            else {
+                System.out.println("Invalid!");
+            }
+        }
+
+        sc.close();
+    }
+}
